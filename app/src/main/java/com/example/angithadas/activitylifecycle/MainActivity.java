@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Debug;
+import android.os.StrictMode;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -16,7 +18,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
     EditText editText;
@@ -26,21 +32,44 @@ public class MainActivity extends AppCompatActivity {
     String s1;
     TextView textView;
     ImageView imageView;
+    TextView textViewfilter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                .permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         setContentView(R.layout.activity_main);
 
         Toast.makeText(this, "ON CREATE_MAIN", Toast.LENGTH_SHORT).show();
 
+        textViewfilter = (TextView) findViewById(R.id.filterText);
         editText = (EditText) findViewById(R.id.edit_text);
         editText1 = (EditText) findViewById(R.id.editText);
         editText2 = (EditText) findViewById(R.id.editText2);
         textView = (TextView) findViewById(R.id.text);
         phone = (EditText) findViewById(R.id.phone);
+        imageView = (ImageView) findViewById(R.id.image);
 
+
+        Intent intent_implicit = getIntent();
+        String action = intent_implicit.getAction();
+        if (!action.equals(Intent.ACTION_VIEW)) {
+            throw new RuntimeException("Should not happen");
+        }
+        Uri data = intent_implicit.getData();
+
+        try {
+            URL  url = new URL(data.getScheme(), data.getHost(), data.getPath());
+            editText2.setText(url.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        //======================================
         Intent intent = getIntent();
         if (intent != null) {
             s1 = intent.getStringExtra("key1");
@@ -115,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void implicit(View view) {
         Intent implicit_intent = new Intent(Intent.ACTION_VIEW);
-        implicit_intent.setData(Uri.parse("http://" + editText2.getText().toString()));
+        implicit_intent.setData(Uri.parse(editText2.getText().toString()));
         startActivity(implicit_intent);
     }
 
@@ -167,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
             Uri uri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                imageView = (ImageView) findViewById(R.id.image);
                 imageView.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();

@@ -5,122 +5,127 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.angithadas.activitylifecycle.MainActivity">
+    <TextView
+        android:id="@+id/filterText"
+        android:ems="10"
+        android:hint="filter text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-    <EditText
-        android:id="@+id/edit_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MainActivity"/>
-    <Button
-        android:id="@+id/button"
-        android:hint="Intent StartActivitySecond"
-        android:onClick="clicked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MainActivity" />
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Intent StartActivitySecond"
+            android:onClick="clicked" />
     </LinearLayout>
     <TextView
         android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:ems="10"
-        android:text="Result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+        android:text="Result" />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-    <EditText
-        android:id="@+id/editText"
-        android:text="Default Text"
-        android:ems="5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <Button
-        android:id="@+id/button1"
-        android:onClick="start_activity_for_result"
-        android:hint="StartActivityForResult Second"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:text="Default Text" />
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="StartActivityForResult Second"
+            android:onClick="start_activity_for_result" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-    <EditText
-        android:id="@+id/editText2"
-        android:hint="Enter url"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:layout_below="@+id/button1"/>
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText2"
-        android:text="Open url in Browser "
-        android:textAllCaps="false"
-        android:onClick="implicit"/>
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/button1"
+            android:ems="10"
+            android:hint="Enter url" />
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editText2"
+            android:onClick="implicit"
+            android:text="Open url in Browser "
+            android:textAllCaps="false" />
     </LinearLayout>
     <Button
         android:id="@+id/read"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAllCaps="false"
         android:onClick="readContact"
-        android:text=" View Phone Contacts " />
-
+        android:text=" View Phone Contacts "
+        android:textAllCaps="false" />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/phone"
-            android:ems="10"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:ems="10" />
+
         <Button
             android:id="@+id/call"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Call"
-            android:onClick="makeCall"/>
+            android:onClick="makeCall"
+            android:text="Call" />
+
         <Button
             android:id="@+id/sms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Send SMS"
-            android:onClick="sendSms"/>
+            android:onClick="sendSms"
+            android:text="Send SMS" />
     </LinearLayout>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-    <Button
-        android:id="@+id/camera"
-        android:text="Camera"
-        android:onClick="camera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/gallery"
-        android:text="Gallery"
-        android:onClick="gallery"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="camera"
+            android:text="Camera" />
+        <Button
+            android:id="@+id/gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="gallery"
+            android:text="Gallery" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/image"
-        android:scaleType="centerCrop"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
 
 </LinearLayout>
