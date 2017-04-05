@@ -1,38 +1,54 @@
 package com.example.angithadas.activitylifecycle;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity{
+import java.io.IOException;
+
+public class MainActivity extends AppCompatActivity {
     EditText editText;
     EditText editText1;
+    EditText editText2;
+    EditText phone;
     String s1;
     TextView textView;
+    ImageView imageView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toast.makeText(this,"ON CREATE_MAIN", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "ON CREATE_MAIN", Toast.LENGTH_SHORT).show();
 
         editText = (EditText) findViewById(R.id.edit_text);
         editText1 = (EditText) findViewById(R.id.editText);
+        editText2 = (EditText) findViewById(R.id.editText2);
         textView = (TextView) findViewById(R.id.text);
+        phone = (EditText) findViewById(R.id.phone);
 
         Intent intent = getIntent();
-        if(intent != null) {
+        if (intent != null) {
             s1 = intent.getStringExtra("key1");
             textView.setText(s1);
         }
 
         Intent in = getIntent();
-        if(in != null) {
+        if (in != null) {
             Bundle b = in.getExtras();
             if (b != null) {
                 String nameString = b.getString("name");
@@ -52,44 +68,92 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onStart() {
         super.onStart();
-        Toast.makeText(this,"ON START_MAIN", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "ON START_MAIN", Toast.LENGTH_SHORT).show();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(this,"ON RESUME_MAIN", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "ON RESUME_MAIN", Toast.LENGTH_SHORT).show();
     }
+
     @Override
     protected void onPause() {
         super.onPause();
-        Toast.makeText(this,"ON PAUSE_MAIN", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "ON PAUSE_MAIN", Toast.LENGTH_SHORT).show();
     }
+
     @Override
     protected void onRestart() {
         super.onRestart();
-        Toast.makeText(this,"ON RESTART_MAIN", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "ON RESTART_MAIN", Toast.LENGTH_SHORT).show();
     }
+
     @Override
     protected void onStop() {
         super.onStop();
-        Toast.makeText(this,"ON STOP_MAIN", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "ON STOP_MAIN", Toast.LENGTH_SHORT).show();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this,"ON DESTROY_MAIN", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "ON DESTROY_MAIN", Toast.LENGTH_SHORT).show();
     }
 
-    public void clicked(View view){
+    public void clicked(View view) {
         Intent i = new Intent(this, SecondActivity.class);
-        i.putExtra("key",editText.getText().toString());
+        i.putExtra("key", editText.getText().toString());
         startActivity(i);
     }
 
-    public void start_activity_for_result(View view){
+    public void start_activity_for_result(View view) {
         Intent i = new Intent(this, SecondActivity.class);
-        i.putExtra("MESSAGE",editText1.getText().toString());
-        startActivityForResult(i,1);
+        i.putExtra("MESSAGE", editText1.getText().toString());
+        startActivityForResult(i, 1);
+    }
+
+    public void implicit(View view) {
+        Intent implicit_intent = new Intent(Intent.ACTION_VIEW);
+        implicit_intent.setData(Uri.parse("http://" + editText2.getText().toString()));
+        startActivity(implicit_intent);
+    }
+
+    public void readContact(View view) {
+        Intent readContact = new Intent();
+        readContact.setAction(Intent.ACTION_VIEW);
+        readContact.setData(ContactsContract.Contacts.CONTENT_URI);
+        startActivity(readContact);
+    }
+
+    public void makeCall(View view) {
+        String uri = "tel:" + phone.getText();
+        Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(uri));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            return;
+        }
+        startActivity(callIntent);
+    }
+
+    public void sendSms(View view){
+        Intent sms=new Intent();
+        sms.setAction(Intent.ACTION_VIEW);
+        sms.setData(Uri.parse("smsto:"+phone.getText().toString()));
+        startActivity(sms);
+    }
+
+    public void camera(View view){
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+        startActivityForResult(cameraIntent, 3);
+    }
+
+    public void gallery(View view){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 2);
     }
 
     @Override
@@ -99,6 +163,18 @@ public class MainActivity extends AppCompatActivity{
         {
             String message=data.getStringExtra("MESSAGE");
             editText1.setText(message);
+        }else if (requestCode == 2 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                imageView = (ImageView) findViewById(R.id.image);
+                imageView.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else  if (requestCode == 3 && resultCode == RESULT_OK) {
+            Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+            imageView.setImageBitmap(bitmap);
         }
     }
 }
